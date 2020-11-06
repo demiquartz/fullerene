@@ -1,9 +1,13 @@
+build/
+doc/
+version.hpp
 CMakeLists.txt.user
 CMakeCache.txt
 CMakeFiles
 CMakeScripts
 Testing
 Makefile
+Doxyfile
 cmake_install.cmake
 install_manifest.txt
 compile_commands.json

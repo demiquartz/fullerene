@@ -1,0 +1,23 @@
+/** @file
+ * @brief バージョン情報
+ * @author Takaaki Sato
+ * @copyright Copyright (c) 2020 Demiquartz &lt;info@demiquartz.jp&gt; @n
+ * Distributed under the MIT License (See accompanying file LICENSE
+ * or copy at https://opensource.org/licenses/MIT)
+ */
+#ifndef INCLUDED_9F35E077_2762_4271_B60F_F540171D8B61
+#define INCLUDED_9F35E077_2762_4271_B60F_F540171D8B61
+
+/// バージョン文字列
+#define VERSION  "${VerString}"
+/// リビジョン文字列
+#define REVISION "${RevString}"
+
+/// メジャーバージョン番号
+#define VERSION_MAJOR ${PROJECT_VERSION_MAJOR}
+/// マイナーバージョン番号
+#define VERSION_MINOR ${PROJECT_VERSION_MINOR}
+/// パッチバージョン番号
+#define VERSION_PATCH ${PROJECT_VERSION_PATCH}
+
+#endif // INCLUDED_9F35E077_2762_4271_B60F_F540171D8B61

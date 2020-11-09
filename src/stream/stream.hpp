@@ -8,6 +8,7 @@
 #ifndef INCLUDED_4FBE4C72_E6DD_4F54_A3C1_F429E7692EE7
 #define INCLUDED_4FBE4C72_E6DD_4F54_A3C1_F429E7692EE7
 
+#include <memory>
 #include <string>
 
 namespace Fullerene::Stream {
@@ -154,9 +155,9 @@ public:
      * @param [in] path ストリーム識別文字列
      * @param [in] mode オープンモード
      *
-     * @return Streamオブジェクト
+     * @return Streamオブジェクトの共有ポインタ
      */
-    virtual Stream Open(const std::string& path, const std::string& mode) = 0;
+    virtual std::shared_ptr<Stream> Open(const std::string& path, const std::string& mode) = 0;
 };
 
 } // namespace Fullerene::Stream

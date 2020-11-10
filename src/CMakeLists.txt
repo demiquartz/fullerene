@@ -33,5 +33,6 @@ PRIVATE
 
 target_sources(${PROJECT_NAME}
 PRIVATE
+    stream/file.cpp
     main.cpp
 )

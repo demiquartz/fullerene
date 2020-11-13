@@ -27,16 +27,6 @@ public:
     virtual ~Stream() {}
 
     /**
-     * @brief ストリームの状態を取得
-     *
-     * ストリームが使用可能か問い合わせます。
-     *
-     * @retval true  使用可能
-     * @retval false 使用不可能
-     */
-    virtual explicit operator bool() const = 0;
-
-    /**
      * @brief ストリームサイズを取得
      *
      * 現在開かれているストリームのサイズを取得します。@n

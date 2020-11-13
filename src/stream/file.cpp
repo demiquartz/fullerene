@@ -6,6 +6,7 @@
  * or copy at https://opensource.org/licenses/MIT)
  */
 #include <cstdio>
+#include <system_error>
 #include <sys/stat.h>
 #include "file.hpp"
 
@@ -14,14 +15,11 @@ namespace Fullerene::Stream {
 class File final : public Stream {
 public:
     File(const std::string& path, const std::string& mode) : Handle_(std::fopen(path.c_str(), (mode.find('b') == std::string::npos ? mode + 'b' : mode).c_str())) {
+        if (!Handle_) throw std::system_error(errno, std::generic_category(), path);
     }
 
     virtual ~File() override {
-        if (Handle_) std::fclose(Handle_);
-    }
-
-    virtual explicit operator bool() const override {
-        return Handle_ != nullptr;
+        std::fclose(Handle_);
     }
 
     virtual std::size_t Size(void) override {

@@ -40,7 +40,7 @@ public:
     }
 
     virtual bool Seek(std::size_t offset) override {
-        return std::fseek(Handle_, offset, SEEK_SET);
+        return std::fseek(Handle_, offset, SEEK_SET) == 0;
     }
 
     virtual std::size_t Tell(void) override {

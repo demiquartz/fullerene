@@ -155,6 +155,11 @@ public:
     virtual StreamPointer Open(const std::string& path, const std::string& mode) = 0;
 };
 
+/**
+ * @brief StreamFactoryの共有ポインタ
+ */
+using StreamFactoryPointer = std::shared_ptr<StreamFactory>;
+
 } // namespace Fullerene::Stream
 
 #endif // INCLUDED_4FBE4C72_E6DD_4F54_A3C1_F429E7692EE7

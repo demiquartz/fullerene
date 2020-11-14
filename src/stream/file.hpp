@@ -53,8 +53,8 @@ public:
      * @param [in] path ファイルパス
      * @param [in] mode オープンモード
      *
-     * @return Streamオブジェクトの共有ポインタ
-     * @throw std::system_error Streamオブジェクトの作成に失敗
+     * @return Streamの共有ポインタ
+     * @throw std::system_error Streamの作成に失敗
      */
     virtual StreamPointer Open(const std::string& path, const std::string& mode) override;
 };

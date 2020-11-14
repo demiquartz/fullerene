@@ -100,7 +100,7 @@ public:
 };
 
 /**
- * @brief Streamオブジェクトの共有ポインタ
+ * @brief Streamの共有ポインタ
  */
 using StreamPointer = std::shared_ptr<Stream>;
 
@@ -150,7 +150,7 @@ public:
      * @param [in] path ストリーム識別文字列
      * @param [in] mode オープンモード
      *
-     * @return Streamオブジェクトの共有ポインタ
+     * @return Streamの共有ポインタ
      */
     virtual StreamPointer Open(const std::string& path, const std::string& mode) = 0;
 };

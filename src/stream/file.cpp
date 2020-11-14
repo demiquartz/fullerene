@@ -51,7 +51,7 @@ private:
     FILE* Handle_;
 };
 
-std::shared_ptr<Stream> FileFactory::Open(const std::string& path, const std::string& mode) {
+StreamPointer FileFactory::Open(const std::string& path, const std::string& mode) {
     return std::make_shared<File>(path, mode);
 }
 

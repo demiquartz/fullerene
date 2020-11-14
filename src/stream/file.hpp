@@ -56,7 +56,7 @@ public:
      * @return Streamオブジェクトの共有ポインタ
      * @throw std::system_error Streamオブジェクトの作成に失敗
      */
-    virtual std::shared_ptr<Stream> Open(const std::string& path, const std::string& mode) override;
+    virtual StreamPointer Open(const std::string& path, const std::string& mode) override;
 };
 
 } // namespace Fullerene::Stream

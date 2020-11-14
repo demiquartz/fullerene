@@ -100,6 +100,11 @@ public:
 };
 
 /**
+ * @brief Streamオブジェクトの共有ポインタ
+ */
+using StreamPointer = std::shared_ptr<Stream>;
+
+/**
  * @brief ストリームファクトリインタフェース
  *
  * ストリームインスタンスを生成するためのファクトリインタフェースです。
@@ -147,7 +152,7 @@ public:
      *
      * @return Streamオブジェクトの共有ポインタ
      */
-    virtual std::shared_ptr<Stream> Open(const std::string& path, const std::string& mode) = 0;
+    virtual StreamPointer Open(const std::string& path, const std::string& mode) = 0;
 };
 
 } // namespace Fullerene::Stream

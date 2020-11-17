@@ -8,6 +8,9 @@
 #ifndef INCLUDED_9F35E077_2762_4271_B60F_F540171D8B61
 #define INCLUDED_9F35E077_2762_4271_B60F_F540171D8B61
 
+/// システム名
+#define SYSTEM_NAME "FullereneEngine"
+
 /// バージョン文字列
 #define VERSION  "${VerString}"
 /// リビジョン文字列

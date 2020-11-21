@@ -235,7 +235,7 @@ struct Vulkan::Impl {
         depthAttachment.format      = vk::Format::eD24UnormS8Uint;
         depthAttachment.finalLayout = vk::ImageLayout::eDepthStencilAttachmentOptimal;
         std::array<vk::AttachmentReference, 1> colorReference;
-        colorReference[0] = { 0, vk::ImageLayout::eColorAttachmentOptimal        };
+        colorReference[0] = { 0, vk::ImageLayout::ePresentSrcKHR                 };
         std::array<vk::AttachmentReference, 1> depthReference;
         depthReference[0] = { 1, vk::ImageLayout::eDepthStencilAttachmentOptimal };
         subpasses[0].setPipelineBindPoint(vk::PipelineBindPoint::eGraphics);

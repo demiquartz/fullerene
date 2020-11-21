@@ -13,7 +13,7 @@ endif()
 
 project(fullerene VERSION ${VerString})
 
-configure_file(version.hpp.in ${PROJECT_SOURCE_DIR}/version.hpp)
+configure_file(version.hpp.in ${PROJECT_SOURCE_DIR}/../include/${PROJECT_NAME}/version.hpp)
 configure_file(../Doxyfile.in ${PROJECT_SOURCE_DIR}/../Doxyfile)
 
 add_executable(${PROJECT_NAME})
@@ -21,7 +21,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES CXX_EXTENSIONS NO)
 
 target_include_directories(${PROJECT_NAME}
 PRIVATE
-    ${PROJECT_SOURCE_DIR}
+    ${PROJECT_SOURCE_DIR}/../include
 #    /VulkanSDK/1.2.154.1/Include
 )
 

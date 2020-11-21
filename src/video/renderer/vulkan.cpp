@@ -7,7 +7,7 @@
  */
 #include <vulkan/vulkan.hpp>
 #include <GLFW/glfw3.h>
-#include "version.hpp"
+#include <fullerene/version.hpp>
 #include "vulkan.hpp"
 
 namespace Fullerene::Video::Detail {

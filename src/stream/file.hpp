@@ -8,7 +8,7 @@
 #ifndef FULLERENE_F02E0775_D05B_4133_A076_C1BD6E9F028D
 #define FULLERENE_F02E0775_D05B_4133_A076_C1BD6E9F028D
 
-#include "stream.hpp"
+#include <fullerene/stream/stream.hpp>
 
 namespace Fullerene::Stream {
 

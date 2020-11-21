@@ -9,7 +9,7 @@
 #define FULLERENE_1BF10221_6A1A_4E19_84F1_CE018A6D320A
 
 #include <memory>
-#include "../renderer.hpp"
+#include <fullerene/video/renderer.hpp>
 
 namespace Fullerene::Video::Detail {
 

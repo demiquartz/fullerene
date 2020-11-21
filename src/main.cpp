@@ -8,9 +8,9 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <fullerene/version.hpp>
 #include "stream/file.hpp"
 #include "video/renderer/vulkan.hpp"
-#include "version.hpp"
 
 int main(int argc, char** argv) {
     std::cout << REVISION << std::endl << std::endl;

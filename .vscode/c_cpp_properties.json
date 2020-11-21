@@ -4,6 +4,7 @@
             "name": "Win32",
             "includePath": [
                 "C:/VulkanSDK/1.2.154.1/Include",
+                "${workspaceFolder}/include",
                 "${workspaceFolder}/**"
             ],
             "defines": [

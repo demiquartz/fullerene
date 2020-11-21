@@ -317,7 +317,7 @@ struct Vulkan::Impl {
         submitInfos[0].signalSemaphoreCount = 1;
         submitInfos[0].pSignalSemaphores    = &RenderCompletedSemaphore.get();
 //        LogicalDevice->resetFences(1, &(*PresentFences[imageIndex]));
-        QueuePresent.submit(submitInfos);
+        QueuePresent.submit(submitInfos, nullptr);
         vk::PresentInfoKHR presentInfo;
         presentInfo.waitSemaphoreCount = 1;
         presentInfo.pWaitSemaphores    = &PresentCompletedSemaphore.get();

@@ -1,1 +1,1 @@
-rm -rf build doc Doxyfile
+rm -rf build doc/fullerene Doxyfile

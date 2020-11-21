@@ -19,21 +19,19 @@ configure_file(../Doxyfile.in ${PROJECT_SOURCE_DIR}/../Doxyfile)
 add_executable(${PROJECT_NAME})
 set_target_properties(${PROJECT_NAME} PROPERTIES CXX_EXTENSIONS NO)
 
+find_package(glfw3 3.2 REQUIRED)
+find_package(vulkan 1.2 REQUIRED)
+
 target_include_directories(${PROJECT_NAME}
 PRIVATE
     ${PROJECT_SOURCE_DIR}/../include
-    $ENV{VULKAN_SDK}/Include
-)
-
-target_link_directories(${PROJECT_NAME}
-PRIVATE
-    $ENV{VULKAN_SDK}/Lib
+    ${Vulkan_INCLUDE_DIR}
 )
 
 target_link_libraries(${PROJECT_NAME}
 PRIVATE
-    glfw3
-    vulkan-1
+    glfw
+    ${Vulkan_LIBRARY}
 )
 
 target_compile_features(${PROJECT_NAME}

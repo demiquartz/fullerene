@@ -1,5 +1,5 @@
 build/
-doc/fullerene/
+doc/
 version.hpp
 CMakeLists.txt.user
 CMakeCache.txt

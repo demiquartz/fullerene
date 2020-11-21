@@ -5,8 +5,8 @@
  * Distributed under the MIT License (See accompanying file LICENSE
  * or copy at https://opensource.org/licenses/MIT)
  */
-#ifndef INCLUDED_4FBE4C72_E6DD_4F54_A3C1_F429E7692EE7
-#define INCLUDED_4FBE4C72_E6DD_4F54_A3C1_F429E7692EE7
+#ifndef FULLERENE_A45F9112_5759_4C8B_B3A6_0ABD437D9C70
+#define FULLERENE_A45F9112_5759_4C8B_B3A6_0ABD437D9C70
 
 #include <memory>
 #include <string>
@@ -162,4 +162,4 @@ using StreamFactoryPointer = std::shared_ptr<StreamFactory>;
 
 } // namespace Fullerene::Stream
 
-#endif // INCLUDED_4FBE4C72_E6DD_4F54_A3C1_F429E7692EE7
+#endif // FULLERENE_A45F9112_5759_4C8B_B3A6_0ABD437D9C70

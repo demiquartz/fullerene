@@ -5,8 +5,8 @@
  * Distributed under the MIT License (See accompanying file LICENSE
  * or copy at https://opensource.org/licenses/MIT)
  */
-#ifndef INCLUDED_8F483776_2C56_4E98_8199_5504417D01EE
-#define INCLUDED_8F483776_2C56_4E98_8199_5504417D01EE
+#ifndef FULLERENE_F02E0775_D05B_4133_A076_C1BD6E9F028D
+#define FULLERENE_F02E0775_D05B_4133_A076_C1BD6E9F028D
 
 #include "stream.hpp"
 
@@ -61,4 +61,4 @@ public:
 
 } // namespace Fullerene::Stream
 
-#endif // INCLUDED_8F483776_2C56_4E98_8199_5504417D01EE
+#endif // FULLERENE_F02E0775_D05B_4133_A076_C1BD6E9F028D

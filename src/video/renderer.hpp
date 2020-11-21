@@ -5,8 +5,8 @@
  * Distributed under the MIT License (See accompanying file LICENSE
  * or copy at https://opensource.org/licenses/MIT)
  */
-#ifndef INCLUDED_581C6CEE_99E5_4E3A_A8EC_003FFD69B5C4
-#define INCLUDED_581C6CEE_99E5_4E3A_A8EC_003FFD69B5C4
+#ifndef FULLERENE_EC3EFB39_0F22_4302_98BC_00BDFD62E7B1
+#define FULLERENE_EC3EFB39_0F22_4302_98BC_00BDFD62E7B1
 
 namespace Fullerene::Video {
 
@@ -25,4 +25,4 @@ public:
 
 } // Fullerene::Video
 
-#endif // INCLUDED_581C6CEE_99E5_4E3A_A8EC_003FFD69B5C4
+#endif // FULLERENE_EC3EFB39_0F22_4302_98BC_00BDFD62E7B1

@@ -5,8 +5,8 @@
  * Distributed under the MIT License (See accompanying file LICENSE
  * or copy at https://opensource.org/licenses/MIT)
  */
-#ifndef INCLUDED_910AE0CF_5318_4A20_A222_9B613F996E45
-#define INCLUDED_910AE0CF_5318_4A20_A222_9B613F996E45
+#ifndef FULLERENE_1BF10221_6A1A_4E19_84F1_CE018A6D320A
+#define FULLERENE_1BF10221_6A1A_4E19_84F1_CE018A6D320A
 
 #include <memory>
 #include "../renderer.hpp"
@@ -33,4 +33,4 @@ private:
 
 } // Fullerene::Video::Detail
 
-#endif // INCLUDED_910AE0CF_5318_4A20_A222_9B613F996E45
+#endif // FULLERENE_1BF10221_6A1A_4E19_84F1_CE018A6D320A

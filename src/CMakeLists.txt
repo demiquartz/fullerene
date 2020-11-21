@@ -22,12 +22,12 @@ set_target_properties(${PROJECT_NAME} PROPERTIES CXX_EXTENSIONS NO)
 target_include_directories(${PROJECT_NAME}
 PRIVATE
     ${PROJECT_SOURCE_DIR}/../include
-#    /VulkanSDK/1.2.154.1/Include
+    $ENV{VULKAN_SDK}/Include
 )
 
 target_link_directories(${PROJECT_NAME}
 PRIVATE
-    /VulkanSDK/1.2.154.1/Lib
+    $ENV{VULKAN_SDK}/Lib
 )
 
 target_link_libraries(${PROJECT_NAME}

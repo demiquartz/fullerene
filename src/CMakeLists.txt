@@ -20,7 +20,7 @@ add_executable(${PROJECT_NAME})
 set_target_properties(${PROJECT_NAME} PROPERTIES CXX_EXTENSIONS NO)
 
 find_package(glfw3 3.2 REQUIRED)
-find_package(vulkan 1.2 REQUIRED)
+find_package(Vulkan 1.2 REQUIRED)
 
 target_include_directories(${PROJECT_NAME}
 PRIVATE

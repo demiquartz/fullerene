@@ -5,6 +5,8 @@
  * Distributed under the MIT License (See accompanying file LICENSE
  * or copy at https://opensource.org/licenses/MIT)
  */
+#include <iostream>
+#include <chrono>
 #include <vulkan/vulkan.hpp>
 #include <GLFW/glfw3.h>
 #include <fullerene/version.hpp>
@@ -14,6 +16,8 @@ namespace Fullerene::Video::Detail {
 
 struct Vulkan::Impl {
     vk::UniqueInstance                   Instance;
+    GLFWwindow*                          Window;
+    vk::UniqueSurfaceKHR                 Surface;
     vk::UniqueDevice                     LogicalDevice;
     vk::PhysicalDevice                   PhysicalDevice;
     vk::Queue                            QueuePresent;
@@ -24,8 +28,6 @@ struct Vulkan::Impl {
     vk::UniqueCommandPool                CommandPoolGraphics;
     vk::UniqueCommandPool                CommandPoolCompute;
     vk::UniqueCommandPool                CommandPoolTransfer;
-    GLFWwindow*                          Window;
-    vk::UniqueSurfaceKHR                 Surface;
     vk::UniqueSwapchainKHR               Swapchain;
     vk::UniqueImage                      DepthStencil;
     vk::UniqueDeviceMemory               DepthStencilMemory;
@@ -55,11 +57,11 @@ struct Vulkan::Impl {
         const auto appHeight  =  720;
         if (!glfwInit()) throw std::runtime_error("GLFW not initialized");
         CreateInstance(appName, appVersion);
+        CreateWindow(appName, appWidth, appHeight);
+        CreateSurface();
         CreateDevice();
         CreateQueue();
         CreateCommandPool();
-        CreateWindow(appName, appWidth, appHeight);
-        CreateSurface();
         CreateSwapchain();
         CreateDepthStencil();
         CreateImageViews();
@@ -67,12 +69,27 @@ struct Vulkan::Impl {
         CreateFrameBuffers();
         CreateCommandBuffers();
         CreateSyncPrimitive();
+        glfwShowWindow(Window);
         while (glfwWindowShouldClose(Window) == GLFW_FALSE) {
             Clear(1.0f, 0.5f, 0.0f, 1.0f);
             glfwPollEvents();
         }
     }
     ~Impl() {
+        std::vector<vk::Fence> fences;
+        for (auto& fence : PresentFences) fences.emplace_back(*fence);
+        using namespace std::chrono_literals;
+        constexpr auto timeout = std::chrono::duration_cast<std::chrono::nanoseconds>(1s).count();
+        switch (LogicalDevice->waitForFences(fences, VK_TRUE, timeout)) {
+        case vk::Result::eSuccess:
+            break;
+        case vk::Result::eTimeout:
+            std::cerr << "waitForFences timeout" << std::endl;
+            break;
+        default:
+            std::cerr << "waitForFences failure" << std::endl;
+            break;
+        }
         glfwTerminate();
     }
     void CreateInstance(const char* name, std::uint32_t version) {
@@ -87,6 +104,21 @@ struct Vulkan::Impl {
         Instance = vk::createInstanceUnique(insInfo);
         return;
     }
+    void CreateWindow(const char* name, std::size_t width, std::size_t height) {
+        glfwDefaultWindowHints();
+        glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+        glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
+        glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+        Window = glfwCreateWindow(width, height, name, nullptr, nullptr);
+        if (!Window) throw std::runtime_error("Window not created");
+        return;
+    }
+    void CreateSurface(void) {
+        VkSurfaceKHR surface;
+        if (glfwCreateWindowSurface(*Instance, Window, nullptr, &surface) != VK_SUCCESS) throw std::runtime_error("Surface not created");
+        Surface = vk::UniqueSurfaceKHR(surface, vk::ObjectDestroy<vk::Instance, vk::DispatchLoaderStatic>(*Instance));
+        return;
+    }
     void CreateDevice(void) {
         const auto invalid = std::numeric_limits<std::uint32_t>::max();
         for (auto& device : Instance->enumeratePhysicalDevices()) {
@@ -96,7 +128,7 @@ struct Vulkan::Impl {
             FamilyIndexTransfer   = invalid;
             auto familyProperties = device.getQueueFamilyProperties();
             for (std::uint32_t i = 0, size = familyProperties.size(); i < size; ++i) {
-                auto enablePresent  = glfwGetPhysicalDevicePresentationSupport(*Instance, device, i) != GLFW_FALSE;
+                auto enablePresent  = glfwGetPhysicalDevicePresentationSupport(*Instance, device, i) != GLFW_FALSE && device.getSurfaceSupportKHR(i, *Surface) != VK_FALSE;
                 auto enableGraphics = familyProperties[i].queueFlags & vk::QueueFlagBits::eGraphics;
                 auto enableCompute  = familyProperties[i].queueFlags & vk::QueueFlagBits::eCompute;
                 auto enableTransfer = familyProperties[i].queueFlags & vk::QueueFlagBits::eTransfer;
@@ -149,20 +181,6 @@ struct Vulkan::Impl {
         CommandPoolCompute    = LogicalDevice->createCommandPoolUnique(info);
         info.queueFamilyIndex = FamilyIndexTransfer;
         CommandPoolTransfer   = LogicalDevice->createCommandPoolUnique(info);
-        return;
-    }
-    void CreateWindow(const char* name, std::size_t width, std::size_t height) {
-        glfwDefaultWindowHints();
-        glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-        glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
-        Window = glfwCreateWindow(width, height, name, nullptr, nullptr);
-        if (!Window) throw std::runtime_error("Window not created");
-        return;
-    }
-    void CreateSurface(void) {
-        VkSurfaceKHR surface;
-        if (glfwCreateWindowSurface(*Instance, Window, nullptr, &surface) != VK_SUCCESS) throw std::runtime_error("Surface not created");
-        Surface = vk::UniqueSurfaceKHR(surface, vk::ObjectDestroy<vk::Instance, vk::DispatchLoaderStatic>(*Instance));
         return;
     }
     void CreateSwapchain(void) {
@@ -235,7 +253,7 @@ struct Vulkan::Impl {
         depthAttachment.format      = vk::Format::eD24UnormS8Uint;
         depthAttachment.finalLayout = vk::ImageLayout::eDepthStencilAttachmentOptimal;
         std::array<vk::AttachmentReference, 1> colorReference;
-        colorReference[0] = { 0, vk::ImageLayout::ePresentSrcKHR                 };
+        colorReference[0] = { 0, vk::ImageLayout::eColorAttachmentOptimal        };
         std::array<vk::AttachmentReference, 1> depthReference;
         depthReference[0] = { 1, vk::ImageLayout::eDepthStencilAttachmentOptimal };
         subpasses[0].setPipelineBindPoint(vk::PipelineBindPoint::eGraphics);
@@ -291,7 +309,7 @@ struct Vulkan::Impl {
         auto cap = PhysicalDevice.getSurfaceCapabilitiesKHR(*Surface);
         std::uint32_t imageIndex;
         LogicalDevice->acquireNextImageKHR(*Swapchain, std::numeric_limits<std::uint64_t>::max(), *PresentCompletedSemaphore, nullptr, &imageIndex);
-//        LogicalDevice->waitForFences(1, &(*PresentFences[imageIndex]), VK_TRUE, std::numeric_limits<std::uint64_t>::max());
+        LogicalDevice->waitForFences(1, &PresentFences[imageIndex].get(), VK_TRUE, std::numeric_limits<std::uint64_t>::max());
         std::array<vk::ClearValue, 2> clearValues;
         clearValues[0].color.float32[0]     =   r;
         clearValues[0].color.float32[1]     =   g;
@@ -299,34 +317,32 @@ struct Vulkan::Impl {
         clearValues[0].color.float32[3]     =   a;
         clearValues[1].depthStencil.depth   = 1.0;
         clearValues[1].depthStencil.stencil =   0;
-        vk::Rect2D renderArea({ 0, 0 }, cap.currentExtent);
         vk::CommandBufferBeginInfo info;
         CommandBuffersPresent[imageIndex]->begin(info);
+        vk::Rect2D renderArea({ 0, 0 }, cap.currentExtent);
         vk::RenderPassBeginInfo rpInfo(*RenderPass, *Framebuffers[imageIndex], renderArea, clearValues);
         CommandBuffersPresent[imageIndex]->beginRenderPass(rpInfo, vk::SubpassContents::eInline);
-        std::vector<vk::CommandBuffer> commandBuffers;
-        for (auto& commandBuffer : CommandBuffersPresent) {
-            commandBuffers.push_back(*commandBuffer);
-        }
-        vk::PipelineStageFlags waitStageMask = vk::PipelineStageFlagBits::eColorAttachmentOutput;
+        // 描画処理
+        CommandBuffersPresent[imageIndex]->endRenderPass();
+        CommandBuffersPresent[imageIndex]->end();
         std::array<vk::SubmitInfo, 1> submitInfos;
-        submitInfos[0].setCommandBuffers(commandBuffers);
+        vk::PipelineStageFlags waitStageMask = vk::PipelineStageFlagBits::eColorAttachmentOutput;
+        submitInfos[0].commandBufferCount   = 1;
+        submitInfos[0].pCommandBuffers      = &CommandBuffersPresent[imageIndex].get();
         submitInfos[0].pWaitDstStageMask    = &waitStageMask;
         submitInfos[0].waitSemaphoreCount   = 1;
         submitInfos[0].pWaitSemaphores      = &PresentCompletedSemaphore.get();
         submitInfos[0].signalSemaphoreCount = 1;
         submitInfos[0].pSignalSemaphores    = &RenderCompletedSemaphore.get();
-//        LogicalDevice->resetFences(1, &(*PresentFences[imageIndex]));
-        QueuePresent.submit(submitInfos, nullptr);
+        LogicalDevice->resetFences(1, &PresentFences[imageIndex].get());
+        QueuePresent.submit(submitInfos, *PresentFences[imageIndex]);
         vk::PresentInfoKHR presentInfo;
         presentInfo.waitSemaphoreCount = 1;
-        presentInfo.pWaitSemaphores    = &PresentCompletedSemaphore.get();
+        presentInfo.pWaitSemaphores    = &RenderCompletedSemaphore.get();
         presentInfo.swapchainCount     = 1;
         presentInfo.pSwapchains        = &Swapchain.get();
         presentInfo.pImageIndices      = &imageIndex;
         QueuePresent.presentKHR(presentInfo);
-        CommandBuffersPresent[imageIndex]->endRenderPass();
-        CommandBuffersPresent[imageIndex]->end();
     }
 };
 
